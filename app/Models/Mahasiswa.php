@@ -10,16 +10,16 @@ use Illuminate\Database\Eloquent\Model; //Model Eloquent
 class Mahasiswa extends Model 
 {
     protected $table = 'mahasiswa';
-    protected $primaryKey = 'id_mahasiswa';
+    protected $primaryKey = 'nim';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'Nim',
-        'Nama',
-        'Kelas',
-        'Jurusan',
+        'nim',
+        'nama',
+        'kelas',
+        'jurusan',
     ];
 };
