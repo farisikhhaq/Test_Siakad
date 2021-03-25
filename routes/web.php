@@ -14,8 +14,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('mahasiswa.index');
-});
+// Route::get('/', function () {
+//     return view('mahasiswa');
+// });
 
 Route::resource('mahasiswa', MahasiswaController::class);
