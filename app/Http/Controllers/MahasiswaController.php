@@ -42,8 +42,11 @@ class MahasiswaController extends Controller
         $request->validate([
             'nim' => 'required',
             'nama' => 'required',
+            'email' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
+            'alamat' => 'required',
+            'tgl_lahir' => 'required',
         ]);
         Mahasiswa::create($request->all());
         return redirect()->route('mahasiswa.index')
@@ -86,8 +89,11 @@ class MahasiswaController extends Controller
         $request->validate([
             'nim' => 'required',
             'nama' => 'required',
+            'email' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
+            'alamat' => 'required',
+            'tgl_lahir' => 'required',
         ]);
         Mahasiswa::find($nim)->update($request->all());
         return redirect()->route('mahasiswa.index')

@@ -31,12 +31,24 @@
                             <input type="Nama" name="nama" class="form-control" id="nama" ariadescribedby="nama">
                         </div>
                         <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="text" name="email" class="form-control" id="email" ariadescribedby="email" >
+                        </div>
+                        <div class="form-group">
                             <label for="Kelas">Kelas</label>
                             <input type="Kelas" name="kelas" class="form-control" id="kelas" ariadescribedby="kelas">
                         </div>
                         <div class="form-group">
                             <label for="jurusan">Jurusan</label>
                             <input type="jurusan" name="jurusan" class="form-control" id="jurusan" ariadescribedby="jurusan">
+                        </div>
+                        <div class="form-group">
+                            <label for="jurusan">Alamat</label>
+                            <input type="jurusan" name="alamat" class="form-control" id="alamat" ariadescribedby="alamat">
+                        </div>
+                        <div class="form-group">
+                            <label for="tgl_lahir">Tanggal Lahir</label>
+                            <input type="date" name="tgl_lahir" class="form-control" id="tgl_lahir" ariadescribedby="tgl_lahir" >
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
