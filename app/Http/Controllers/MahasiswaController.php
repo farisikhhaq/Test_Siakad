@@ -13,12 +13,20 @@ class MahasiswaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
-        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3) ;
-        return view('mahasiswa.index', compact('mahasiswa', 'posts'));
-        // with('i', (request()->input('page', 1) - 1) * 5);
+        // $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
+        $keyword = $request->get('keyword');
+        $mahasiswa = Mahasiswa::all();
+
+        if($keyword){
+            $mahasiswa = Mahasiswa::where("nama","LIKE", "%$keyword%")->get();
+            $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
+        }
+        
+        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
+        return view('mahasiswa.index', compact('mahasiswa','posts','keyword'));
+        // with('i', (request()->input('page', 1) - 1) * 5);`
     }
 
     /**
@@ -112,4 +120,10 @@ class MahasiswaController extends Controller
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Dihapus');
     }
+
+    // public function search(){
+    //     $search_text = $_GET['query'];
+    //     $cari = Mahasiswa::where('nama','LIKE', '%'.$search_text.'%')->get();
+    //     return view('mahasiswa.search',compact('cari'));
+
 }

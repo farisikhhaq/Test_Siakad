@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MahasiswaController;
 use Illuminate\Http\Request; 
+use App\Models\Mahasiswa;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,3 +21,4 @@ use Illuminate\Http\Request;
 // });
 
 Route::resource('mahasiswa', MahasiswaController::class);
+// Route::get('ind', [MahasiswaController::class,'index']);
