@@ -16,7 +16,7 @@ class MahasiswaController extends Controller
     public function index()
     {
         $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
-        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(6);
+        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3) ;
         return view('mahasiswa.index', compact('mahasiswa', 'posts'));
         // with('i', (request()->input('page', 1) - 1) * 5);
     }

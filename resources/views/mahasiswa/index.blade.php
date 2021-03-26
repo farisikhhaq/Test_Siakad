@@ -28,7 +28,7 @@
             <th>Tanggal Lahir</th>
             <th width="280px">Action</th>
         </tr>
-        @foreach ($mahasiswa as $mhs)
+        @foreach ($posts as $mhs)
             <tr>
 
                 <td>{{ $mhs->nim }}</td>
@@ -51,4 +51,7 @@
             </tr>
         @endforeach
     </table>
+    <div class="d-flex float-right">
+        {{$posts->links('pagination::bootstrap-4')}}
+    </div>
 @endsection
