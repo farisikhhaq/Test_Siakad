@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Kelas; 
 
 class MahasiswaController extends Controller
 {
@@ -15,17 +16,21 @@ class MahasiswaController extends Controller
      */
     public function index(Request $request)
     {
-        // $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
-        $keyword = $request->get('keyword');
-        $mahasiswa = Mahasiswa::all();
+        $mahasiswa = Mahasiswa::with('kelas')->get();
+        $paginate = Mahasiswa::orderBy('id_mahasiswa', 'asc')->paginate(3);
+        return view('mahasiswa.index',['mahasiswa'=> $mahasiswa, 'paginate'=>$paginate]);
 
-        if($keyword){
-            $mahasiswa = Mahasiswa::where("nama","LIKE", "%$keyword%")->get();
-            $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
-        }
+        // $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
+        // $keyword = $request->get('keyword');
+        // $mahasiswa = Mahasiswa::all();
+
+        // if($keyword){
+        //     $mahasiswa = Mahasiswa::where("nama","LIKE", "%$keyword%")->get();
+        //     $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
+        // }
         
-        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
-        return view('mahasiswa.index', compact('mahasiswa','posts','keyword'));
+        // $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
+        // return view('mahasiswa.index', compact('mahasiswa','posts','keyword'));
         // with('i', (request()->input('page', 1) - 1) * 5);`
     }
 
@@ -51,7 +56,7 @@ class MahasiswaController extends Controller
             'nim' => 'required',
             'nama' => 'required',
             'email' => 'required',
-            'kelas' => 'required',
+            'kelas_id' => 'required',
             'jurusan' => 'required',
             'alamat' => 'required',
             'tgl_lahir' => 'required',
@@ -98,7 +103,7 @@ class MahasiswaController extends Controller
             'nim' => 'required',
             'nama' => 'required',
             'email' => 'required',
-            'kelas' => 'required',
+            'kelas_id' => 'required',
             'jurusan' => 'required',
             'alamat' => 'required',
             'tgl_lahir' => 'required',
