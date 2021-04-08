@@ -32,13 +32,14 @@
             <th>Tanggal Lahir</th>
             <th width="280px">Action</th>
         </tr>
-        @foreach ($posts as $mhs)
+        {{-- @foreach ($posts as $mhs) --}}
+        @foreach ($paginate as $mhs)
             <tr>
 
                 <td>{{ $mhs->nim }}</td>
                 <td>{{ $mhs->nama }}</td>
                 <td>{{ $mhs->email }}</td>
-                <td>{{ $mhs->kelas }}</td>
+                <td>{{ $mhs->kelas->nama_kelas }}</td>
                 <td>{{ $mhs->jurusan }}</td>
                 <td>{{ $mhs->alamat }}</td>
                 <td>{{ $mhs->tgl_lahir }}</td>
@@ -55,7 +56,7 @@
             </tr>
         @endforeach
     </table>
-    <div class="d-flex float-right">
+    {{-- <div class="d-flex float-right">
         {{$posts->links('pagination::bootstrap-4')}}
-    </div>
+    </div> --}}
 @endsection
