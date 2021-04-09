@@ -34,9 +34,17 @@
                             <label for="email">E-mail</label>
                             <input type="text" name="email" class="form-control" id="email" ariadescribedby="email" >
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="Kelas">Kelas</label>
                             <input type="Kelas" name="kelas" class="form-control" id="kelas" ariadescribedby="kelas">
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="kelas">Kelas</label>
+                            <select class="form-control" id="kelas" name="kelas">
+                                @foreach ($class as $kls)
+                                    <option value="{{$kls->id}}">{{$kls->nama_kelas}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="jurusan">Jurusan</label>
