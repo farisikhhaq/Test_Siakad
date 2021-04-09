@@ -41,7 +41,9 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        return view('mahasiswa.create');
+        $class = Kelas::all();
+        return view('mahasiswa.create', compact('class'));
+        // return view('mahasiswa.create');
     }
 
     /**
@@ -56,12 +58,26 @@ class MahasiswaController extends Controller
             'nim' => 'required',
             'nama' => 'required',
             'email' => 'required',
-            'kelas_id' => 'required',
+            'kelas' => 'required',
             'jurusan' => 'required',
             'alamat' => 'required',
             'tgl_lahir' => 'required',
         ]);
-        Mahasiswa::create($request->all());
+
+        $mahasiswa = new Mahasiswa;
+        $mahasiswa->nim = $request->get('nim');
+        $mahasiswa->nama = $request->get('nama');
+        $mahasiswa->email = $request->get('email');
+        $mahasiswa->jurusan = $request->get('jurusan');
+        $mahasiswa->alamat = $request->get('alamat');
+        $mahasiswa->tgl_lahir = $request->get('tgl_lahir');
+        $mahasiswa->save();
+
+        $kelas = new Kelas;
+        $kelas->id = $request->get('kelas');
+        $mahasiswa->kelas()->associate($kelas);
+        $mahasiswa->save();
+
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Ditambahkan');
     }
@@ -74,8 +90,11 @@ class MahasiswaController extends Controller
      */
     public function show($nim)
     {
-        $Mahasiswa = Mahasiswa::find($nim);
-        return view('mahasiswa.detail', compact('Mahasiswa'));
+        $Mahasiswa = Mahasiswa::with('kelas')->where('nim', $nim)->first();
+        return view('mahasiswa.detail', compact('Mahasiswa')); 
+
+       /*  $Mahasiswa = Mahasiswa::find($nim);
+        return view('mahasiswa.detail', compact('Mahasiswa')); */
     }
 
     /**
@@ -86,8 +105,9 @@ class MahasiswaController extends Controller
      */
     public function edit($nim)
     {
-        $Mahasiswa = Mahasiswa::find($nim);
-        return view('mahasiswa.edit', compact('Mahasiswa'));
+        $Mahasiswa = Mahasiswa::with('kelas')->where('nim', $nim)->first();
+        $class = Kelas::all();
+        return view('mahasiswa.edit', compact('Mahasiswa', 'class'));
     }
 
     /**
@@ -103,12 +123,26 @@ class MahasiswaController extends Controller
             'nim' => 'required',
             'nama' => 'required',
             'email' => 'required',
-            'kelas_id' => 'required',
+            'kelas' => 'required',
             'jurusan' => 'required',
             'alamat' => 'required',
             'tgl_lahir' => 'required',
         ]);
-        Mahasiswa::find($nim)->update($request->all());
+        // Mahasiswa::find($nim)->update($request->all());
+        $mahasiswa = Mahasiswa::with('kelas')->where('nim', $nim)->first();
+        $mahasiswa->nim = $request->get('nim');
+        $mahasiswa->nama = $request->get('nama');
+        $mahasiswa->email = $request->get('email');
+        $mahasiswa->jurusan = $request->get('jurusan');
+        $mahasiswa->alamat = $request->get('alamat');
+        $mahasiswa->tgl_lahir = $request->get('tgl_lahir');
+
+        //Menyimpan id kelas yang merupakan foreign key
+        $kelas = new Kelas();
+        $kelas->id = $request->get('kelas');
+        $mahasiswa->kelas()->associate($kelas);
+        $mahasiswa->save();
+
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Diupdate');
     }
