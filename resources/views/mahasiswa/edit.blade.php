@@ -32,11 +32,18 @@
                         </div>
                         <div class="form-group">
                             <label for="e_mail">E-mail</label>
-                            <input type="text" name="email" class="form-control" id="email" value="{{ $Mahasiswa->email }}" ariadescribedby="email" >
+                            <input type="text" name="email" class="form-control" id="email" value="{{ $Mahasiswa->email }}" ariadescribedby="email">
                         </div>
                         <div class="form-group">
                             <label for="kelas">Kelas</label>
-                            <input type="kelas" name="kelas" class="form-control" id="kelas" value="{{ $Mahasiswa->kelas }}" aria-describedby="kelas">
+                            {{-- <input type="kelas" name="kelas" class="form-control" id="kelas" value="{{ $Mahasiswa->kelas }}" aria-describedby="kelas"> --}}
+                            <select name="kelas" id="kelas" class="form-control">
+                            @foreach ($class as $kls)
+                                <option value="{{ $kls->id }}" {{ $Mahasiswa->kelas_id == $kls->id ? 'selected' : '' }}> 
+                                    {{ $kls->nama_kelas }}
+                                </option>
+                            @endforeach
+                        </select>
                         </div>
                         <div class="form-group">
                             <label for="jurusan">Jurusan</label>
@@ -44,11 +51,11 @@
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
-                            <input type="text" name="alamat" class="form-control" id="alamat" value="{{ $Mahasiswa->alamat }}" ariadescribedby="alamat" >
+                            <input type="text" name="alamat" class="form-control" id="alamat"value="{{ $Mahasiswa->alamat }}" ariadescribedby="alamat">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir">Tanggal Lahir</label>
-                            <input type="text" name="tgl_lahir" class="form-control" id="tgl_lahir" value="{{ $Mahasiswa->tgl_lahir }}" ariadescribedby="tgl_lahir" >
+                            <input type="text" name="tgl_lahir" class="form-control" id="tgl_lahir" value="{{ $Mahasiswa->tgl_lahir }}" ariadescribedby="tgl_lahir">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
