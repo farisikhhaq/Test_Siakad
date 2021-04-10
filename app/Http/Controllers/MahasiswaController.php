@@ -17,8 +17,13 @@ class MahasiswaController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::with('kelas')->get();
-        $paginate = Mahasiswa::orderBy('id_mahasiswa', 'asc')->paginate(3);
+        $paginate = Mahasiswa::orderBy('id_mahasiswa', 'asc')->paginate(6);
         return view('mahasiswa.index',['mahasiswa'=> $mahasiswa, 'paginate'=>$paginate]);
+
+        $mahasiswa_relasi = Mahasiswa::with('kelas')
+            ->orderBy('id_mahasiswa', 'asc')
+            ->paginate(6);
+        return view('mahasiswa.index', compact('mahasiswas', 'mahasiswas_relasi'));
 
         // $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
         // $keyword = $request->get('keyword');
@@ -110,6 +115,14 @@ class MahasiswaController extends Controller
         return view('mahasiswa.edit', compact('Mahasiswa', 'class'));
     }
 
+    public function show_khs($nim)
+    {
+        $mahasiswa = Mahasiswa::with('kelas', 'matakuliah')->where('nim', $nim)->first();
+        // dd($mahasiswa->matakuliah[0]);
+        return view('mahasiswa.khs', compact('mahasiswa'));
+    }
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -164,5 +177,4 @@ class MahasiswaController extends Controller
     //     $search_text = $_GET['query'];
     //     $cari = Mahasiswa::where('nama','LIKE', '%'.$search_text.'%')->get();
     //     return view('mahasiswa.search',compact('cari'));
-
 }
