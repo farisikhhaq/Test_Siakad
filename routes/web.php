@@ -22,3 +22,4 @@ use App\Models\Mahasiswa;
 
 Route::resource('mahasiswa', MahasiswaController::class);
 // Route::get('ind', [MahasiswaController::class,'index']);
+Route::get('mahasiswa/nilai/{nim}', [MahasiswaController::class, 'show_khs'])->name('mahasiswa.khs');
