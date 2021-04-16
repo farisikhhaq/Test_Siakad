@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Kelas; 
+use App\Models\Kelas;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
@@ -18,7 +19,7 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = Mahasiswa::with('kelas')->get();
         $paginate = Mahasiswa::orderBy('id_mahasiswa', 'asc')->paginate(6);
-        return view('mahasiswa.index',['mahasiswa'=> $mahasiswa, 'paginate'=>$paginate]);
+        return view('mahasiswa.index', ['mahasiswa' => $mahasiswa, 'paginate' => $paginate]);
 
         $mahasiswa_relasi = Mahasiswa::with('kelas')
             ->orderBy('id_mahasiswa', 'asc')
@@ -33,7 +34,7 @@ class MahasiswaController extends Controller
         //     $mahasiswa = Mahasiswa::where("nama","LIKE", "%$keyword%")->get();
         //     $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
         // }
-        
+
         // $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3); 
         // return view('mahasiswa.index', compact('mahasiswa','posts','keyword'));
         // with('i', (request()->input('page', 1) - 1) * 5);`
@@ -84,8 +85,8 @@ class MahasiswaController extends Controller
         $mahasiswa->kelas()->associate($kelas);
         $mahasiswa->save();
 
-         //Menyimpan gambar
-         if($request->file('foto')){
+        //Menyimpan gambar
+        if ($request->file('foto')) {
             $image_dir = $request->file('foto')->store('images/mahasiswa/profil', 'public');
             $mahasiswa->foto_profil = $image_dir;
         }
@@ -103,9 +104,9 @@ class MahasiswaController extends Controller
     public function show($nim)
     {
         $Mahasiswa = Mahasiswa::with('kelas')->where('nim', $nim)->first();
-        return view('mahasiswa.detail', compact('Mahasiswa')); 
+        return view('mahasiswa.detail', compact('Mahasiswa'));
 
-       /*  $Mahasiswa = Mahasiswa::find($nim);
+        /*  $Mahasiswa = Mahasiswa::find($nim);
         return view('mahasiswa.detail', compact('Mahasiswa')); */
     }
 
@@ -141,6 +142,7 @@ class MahasiswaController extends Controller
     {
         $request->validate([
             'nim' => 'required',
+            'foto' => 'nullable|mimes:jpg,png|dimensions:max_width=100,max_height=100',
             'nama' => 'required',
             'email' => 'required',
             'kelas' => 'required',
@@ -162,7 +164,17 @@ class MahasiswaController extends Controller
         $kelas->id = $request->get('kelas');
         $mahasiswa->kelas()->associate($kelas);
         $mahasiswa->save();
+        
+        //Menghapus gambar profil yang sama
+        if ($mahasiswa->foto_profil && file_exists(storage_path('app/public' . $mahasiswa->foto_profil))) {
+            Storage::delete('public/' . $mahasiswa->foto_profil);
+        }
 
+        //Menyimpan gambar perubahan jika ada
+        if ($request->file('foto')) {
+            $image_dir = $request->file('foto')->store('images/mahasiswa/profil', 'public');
+            $mahasiswa->foto_profil = $image_dir;
+        }
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Diupdate');
     }
