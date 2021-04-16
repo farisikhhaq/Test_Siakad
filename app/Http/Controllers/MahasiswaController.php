@@ -61,6 +61,7 @@ class MahasiswaController extends Controller
     {
         $request->validate([
             'nim' => 'required',
+            'foto' => 'required|mimes:jpg,png|dimensions:max_width=50px,max_height=50px',
             'nama' => 'required',
             'email' => 'required',
             'kelas' => 'required',
@@ -82,6 +83,12 @@ class MahasiswaController extends Controller
         $kelas->id = $request->get('kelas');
         $mahasiswa->kelas()->associate($kelas);
         $mahasiswa->save();
+
+         //Menyimpan gambar
+         if($request->file('foto')){
+            $image_dir = $request->file('foto')->store('images/mahasiswa/profil', 'public');
+            $mahasiswa->foto_profil = $image_dir;
+        }
 
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Ditambahkan');
