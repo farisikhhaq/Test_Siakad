@@ -24,6 +24,7 @@
     <table class="table table-bordered">
         <tr>
             <th>Nim</th>
+            <th>Foto</th>
             <th>Nama</th>
             <th>Email</th>
             <th>Kelas</th>
@@ -37,6 +38,11 @@
             <tr>
 
                 <td>{{ $mhs->nim }}</td>
+                <td>
+                    @if(!is_null($mahasiswa->foto_profil))
+                        <img src="{{asset('storage/' . $mahasiswa->foto_profil)}}" width="100px">
+                    @endif
+                </td>
                 <td>{{ $mhs->nama }}</td>
                 <td>{{ $mhs->email }}</td>
                 <td>{{ $mhs->kelas->nama_kelas}}</td>
