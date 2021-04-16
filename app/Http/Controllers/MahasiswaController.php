@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Kelas;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class MahasiswaController extends Controller
 {
@@ -17,14 +18,26 @@ class MahasiswaController extends Controller
      */
     public function index(Request $request)
     {
-        $mahasiswa = Mahasiswa::with('kelas')->get();
-        $paginate = Mahasiswa::orderBy('id_mahasiswa', 'asc')->paginate(6);
-        return view('mahasiswa.index', ['mahasiswa' => $mahasiswa, 'paginate' => $paginate]);
+        // $mahasiswa = Mahasiswa::with('kelas')->get();
+        // $paginate = Mahasiswa::orderBy('nim', 'desc')->paginate(2);
+        // return view('mahasiswa.index', ['mahasiswa' => $mahasiswa, 'paginate' => $paginate]);
+        $mahasiswa = Mahasiswa::where([
+            ['nim', '!=', null, 'OR', 'nama', '!=', null], //ketika form search kosong, maka request akan null. Ambil semua data di database
+            [function ($query) use ($request) {
+                if (($keyword = $request->keyword)) {
+                    $query->orWhere('nim', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('nama', 'LIKE', '%' . $keyword . '%')->get(); //ketika form search terisi, request tidak null. Ambil data sesuai keyword
+                }
+            }]
+        ])
+            ->orderBy('nim', 'desc')
+            ->paginate(5);
+
 
         $mahasiswa_relasi = Mahasiswa::with('kelas')
-            ->orderBy('id_mahasiswa', 'asc')
-            ->paginate(6);
-        return view('mahasiswa.index', compact('mahasiswas', 'mahasiswas_relasi'));
+            ->orderBy('nim')
+            ->paginate(5);
+        return view('mahasiswa.index', compact('mahasiswa', 'mahasiswa_relasi'))->with('i', (request()->input('page', 1) - 1) * 5);
 
         // $mahasiswa = $mahasiswa = DB::table('mahasiswa')->get();
         // $keyword = $request->get('keyword');
@@ -87,10 +100,10 @@ class MahasiswaController extends Controller
 
         //Menyimpan gambar
         if ($request->file('foto')) {
-            $image_dir = $request->file('foto')->store('images/mahasiswa/profil', 'public');
+            $image_dir = $request->file('foto')->store('images', 'public');
             $mahasiswa->foto_profil = $image_dir;
         }
-
+        
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Ditambahkan');
     }
@@ -164,17 +177,17 @@ class MahasiswaController extends Controller
         $kelas->id = $request->get('kelas');
         $mahasiswa->kelas()->associate($kelas);
         $mahasiswa->save();
-        
+
         //Menghapus gambar profil yang sama
         if ($mahasiswa->foto_profil && file_exists(storage_path('app/public' . $mahasiswa->foto_profil))) {
             Storage::delete('public/' . $mahasiswa->foto_profil);
         }
 
         //Menyimpan gambar perubahan jika ada
-        if ($request->file('foto')) {
-            $image_dir = $request->file('foto')->store('images/mahasiswa/profil', 'public');
+            $image_dir = $request->file('foto')->store('images', 'public');
             $mahasiswa->foto_profil = $image_dir;
-        }
+        
+        $mahasiswa->save();
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Diupdate');
     }
@@ -191,9 +204,10 @@ class MahasiswaController extends Controller
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Mahasiswa Berhasil Dihapus');
     }
-
-    // public function search(){
-    //     $search_text = $_GET['query'];
-    //     $cari = Mahasiswa::where('nama','LIKE', '%'.$search_text.'%')->get();
-    //     return view('mahasiswa.search',compact('cari'));
+    public function cetak_khs($nim)
+    {
+        $mahasiswa = Mahasiswa::with('kelas', 'matakuliah')->where('nim', $nim)->first();
+        $pdf = PDF::loadView('mahasiswa.khs_cetak', compact('mahasiswa'));
+        return $pdf->stream();
+    }
 }

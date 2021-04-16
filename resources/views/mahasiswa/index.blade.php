@@ -34,15 +34,14 @@
             <th width="280px">Action</th>
         </tr>
         {{-- @foreach ($posts as $mhs) --}}
-        @foreach ($paginate as $mhs)
+        @foreach ($mahasiswa_relasi as $mhs)
             <tr>
-
                 <td>{{ $mhs->nim }}</td>
                 <td>
-                    @if(!is_null($mahasiswa->foto_profil))
-                        <img src="{{asset('storage/' . $mahasiswa->foto_profil)}}" width="100px">
+                    @if(!is_null($mhs->foto_profil))
+                        <img src="{{asset('storage/' . $mhs->foto_profil)}}" width="50px" height="50px">
                     @endif
-                </td>
+                </td>   
                 <td>{{ $mhs->nama }}</td>
                 <td>{{ $mhs->email }}</td>
                 <td>{{ $mhs->kelas->nama_kelas}}</td>

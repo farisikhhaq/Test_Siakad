@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Foto">Foto</label>
-                            <input type="file" name="foto" class="form-control-file" id="Foto" aria-describedby="Foto" value="{{ $mahasiswa->foto_profil }}">
+                            <input type="file" name="foto" class="form-control-file" id="foto" aria-describedby="foto" value="{{ $Mahasiswa->foto_profil }}">
                         </div>
                         <div class="form-group">
                             <label for="nama">Nama</label>

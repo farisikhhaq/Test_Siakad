@@ -24,4 +24,7 @@
         @endforeach
 
     </table>
+    <div class="text-center">
+        <a href="{{route('mahasiswa.khs.cetak', $mahasiswa->nim)}}" class="btn btn-danger text-center"> <i class="fas fa-file-pdf" aria-hidden="true"></i> Cetak KHS</a>
+    </div>
     @endsection 

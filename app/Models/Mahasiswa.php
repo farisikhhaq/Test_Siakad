@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model; //Model Eloquent
 class Mahasiswa extends Model 
 {
+    use HasFactory;
     protected $table = 'mahasiswa';
     protected $primaryKey = 'nim';
     /**
